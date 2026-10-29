@@ -33,7 +33,7 @@ jobs:
             curl flex gettext git libtool libtool-bin make patch pkg-config \
             python3 rsync texinfo unzip wget xz-utils
 
-      # Current Android command-line tools require Java 17+
+      # Android SDK setup needs Java 17+; v4 also avoids the removed "tools" package.
       - name: Set up Java 17 for Android SDK tools
         uses: actions/setup-java@v4
         with:
@@ -41,14 +41,15 @@ jobs:
           java-version: "17"
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: "platform-tools"
 
       - name: Install Android SDK packages
         run: |
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-29" "build-tools;29.0.3"
+          sdkmanager "platforms;android-29" "build-tools;29.0.3"
 
-      # This legacy project uses Gradle 6.7.1, which should run on Java 11
+      # This legacy project uses Gradle 6.7.1, which should run on Java 11.
       - name: Set up Java 11 for legacy Gradle build
         uses: actions/setup-java@v4
         with:
