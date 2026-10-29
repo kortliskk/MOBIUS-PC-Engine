@@ -30,7 +30,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             autoconf automake binutils bison build-essential ca-certificates \
-            curl flex gettext git libtool libtool-bin make patch pkg-config \
+            curl flex gettext git gtk-doc-tools libtool libtool-bin make patch pkg-config \
             python3 rsync texinfo unzip wget xz-utils
 
       # Android SDK setup needs Java 17+; v4 also avoids the removed "tools" package.
