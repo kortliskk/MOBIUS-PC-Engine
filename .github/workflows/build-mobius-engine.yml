@@ -33,19 +33,27 @@ jobs:
             curl flex gettext git libtool libtool-bin make patch pkg-config \
             python3 rsync texinfo unzip wget xz-utils
 
-      - name: Set up Java
+      # Current Android command-line tools require Java 17+
+      - name: Set up Java 17 for Android SDK tools
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "11"
+          java-version: "17"
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
       - name: Install Android SDK packages
         run: |
-          sdkmanager "platform-tools" "platforms;android-29" "build-tools;29.0.3"
           yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-29" "build-tools;29.0.3"
+
+      # This legacy project uses Gradle 6.7.1, which should run on Java 11
+      - name: Set up Java 11 for legacy Gradle build
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
 
       - name: Install Gradle 6.7.1
         shell: bash
@@ -132,4 +140,3 @@ jobs:
           path: limbo-android-x86/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 14
-
